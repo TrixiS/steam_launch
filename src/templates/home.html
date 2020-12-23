@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', path='/index.js') }}"></script>
+
+    <div class="container-fluid" id="main-container">
+        <ul class="nav nav-tabs" id="navigation-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="bots-tab" data-bs-toggle="tab" href="#bots" role="tab" aria-controls="bots-tab" aria-selected="true">Bots</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="logs-tab" data-bs-toggle="tab" href="#logs" role="tab" aria-controls="logs-tab" aria-selected="false">Logs</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="bots-tab-content">
+            <div class="tab-pane fade show active" id="bots" role="tabpanel" aria-labelledby="bots-tab">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBotModal" id="add-bot-button">
+                    Add bot
+                </button>
+
+                  <div class="modal fade" id="addBotModal" tabindex="-1" aria-labelledby="addBotModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="addBotModalLabel">Add bot</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="row mb-3">
+                                  <label for="add-bot-login" class="col-sm-2 col-form-label">Login</label>
+                                  <div class="col-sm-10">
+                                    <input class="form-control" id="add-bot-login">
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="add-bot-password" class="col-sm-2 col-form-label">Password</label>
+                                  <div class="col-sm-10">
+                                    <input class="form-control" id="add-bot-password">
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="add-bot-steamid" class="col-sm-2 col-form-label">Steam ID</label>
+                                    <div class="col-sm-10">
+                                      <input class="form-control" id="add-bot-steamid">
+                                    </div>
+                                  </div>
+                                <div class="row mb-3">
+                                    <label for="add-bot-sharedsecret" class="col-sm-2 col-form-label">Shared Secret</label>
+                                    <div class="col-sm-10">
+                                      <input class="form-control" id="add-bot-sharedsecret">
+                                    </div>
+                                  </div>
+                                <div class="row mb-3">
+                                  <label for="add-bot-indetitysecret" class="col-sm-2 col-form-label">Identity Secret</label>
+                                  <div class="col-sm-10">
+                                    <input class="form-control" id="add-bot-indetitysecret">
+                                  </div>
+                                <div class="row mb-3">
+                                  <label for="add-bot-apikey" class="col-sm-2 col-form-label">Steam API Key</label>
+                                  <div class="col-sm-10">
+                                    <input class="form-control" id="add-bot-apikey">
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="add-bot-tmapikey" class="col-sm-2 col-form-label">TM API Key</label>
+                                    <div class="col-sm-10">
+                                      <input class="form-control" id="add-bot-tmapikey">
+                                    </div>
+                                  </div>
+                                <div class="row mb-3">
+                                  <label for="add-bot-googledocid" class="col-sm-2 col-form-label">Google Doc ID</label>
+                                  <div class="col-sm-10">
+                                    <input class="form-control" id="add-bot-googledocid">
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="add-bot-proxy" class="col-sm-2 col-form-label">Proxy</label>
+                                    <div class="col-sm-10">
+                                      <input class="form-control" id="add-bot-proxy">
+                                    </div>
+                                  </div>
+                                </div>
+                              </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" onclick="addBot()">Add bot</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                <table class="table table-hover table-bordered" id="bots-content-table">
+                    <thead>
+                        <tr>
+                        <th scope="col">Steam Login</th>
+                        <th scope="col">On/Off</th>
+                        <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    {% for bot in bots %}
+                    <tbody>
+                        <td scope="row">{{ bot['login'] }}</th>
+                        <td>
+                            {% if bot['state'] %}
+                            <input class="form-check-input" type="checkbox" id="{{ bot['login'] }}" onchange="changeBotState(`{{ bot['login'] }}`)" checked>
+                            {% else %}
+                            <input class="form-check-input" type="checkbox" id="{{ bot['login'] }}" onchange="changeBotState(`{{ bot['login'] }}`)">
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button type="button" class="btn fa fa-edit" data-bs-toggle="modal" data-bs-target="#bot{{ bot['login'] }}Modal" ></button>
+                            </button>
+
+                              <div class="modal fade" id="bot{{ bot['login'] }}Modal" tabindex="-1" aria-labelledby="bot{{ bot['login'] }}ModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="bot{{ bot['login'] }}ModalLabel">Edit bot</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="row mb-3">
+                                              <label for="{{ bot['login'] }}-password" class="col-sm-2 col-form-label">Password</label>
+                                              <div class="col-sm-10">
+                                                <input class="form-control" id="{{ bot['login'] }}-password" value="{{ bot['password'] }}">
+                                              </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label for="{{ bot['login'] }}-steamid" class="col-sm-2 col-form-label">Steam ID</label>
+                                                <div class="col-sm-10">
+                                                  <input class="form-control" id="{{ bot['login'] }}-steamid" value="{{ bot['steamid'] }}">
+                                                </div>
+                                              </div>
+                                            <div class="row mb-3">
+                                                <label for="{{ bot['login'] }}-sharedsecret" class="col-sm-2 col-form-label">Shared Secret</label>
+                                                <div class="col-sm-10">
+                                                  <input class="form-control" id="{{ bot['login'] }}-sharedsecret" value="{{ bot['shared_secret'] }}">
+                                                </div>
+                                              </div>
+                                            <div class="row mb-3">
+                                              <label for="{{ bot['login'] }}-indetitysecret" class="col-sm-2 col-form-label">Identity Secret</label>
+                                              <div class="col-sm-10">
+                                                <input class="form-control" id="{{ bot['login'] }}-indetitysecret" value="{{ bot['identity_secret'] }}">
+                                              </div>
+                                            <div class="row mb-3">
+                                              <label for="{{ bot['login'] }}-apikey" class="col-sm-2 col-form-label">Steam API Key</label>
+                                              <div class="col-sm-10">
+                                                <input class="form-control" id="{{ bot['login'] }}-apikey" value="{{ bot['steam_api_key'] }}">
+                                              </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label for="{{ bot['login'] }}-tmapikey" class="col-sm-2 col-form-label">TM API Key</label>
+                                                <div class="col-sm-10">
+                                                  <input class="form-control" id="{{ bot['login'] }}-tmapikey" value="{{ bot['tm_api_key'] }}">
+                                                </div>
+                                              </div>
+                                            <div class="row mb-3">
+                                              <label for="{{ bot['login'] }}-googledocid" class="col-sm-2 col-form-label">Google Doc ID</label>
+                                              <div class="col-sm-10">
+                                                <input class="form-control" id="{{ bot['login'] }}-googledocid" value="{{ bot['google_doc_id'] }}">
+                                              </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label for="{{ bot['login'] }}-proxy" class="col-sm-2 col-form-label">Proxy</label>
+                                                <div class="col-sm-10">
+                                                  <input class="form-control" id="{{ bot['login'] }}-proxy" value="{{ bot['proxy'] }}">
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-primary" onclick="addBot(`{{ bot['login'] }}`)">Edit bot</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            <button type="button" class="btn fa fa-trash" onclick="deleteBot(`{{ bot['login'] }}`)"></button>
+                        </td>
+                    </tbody>
+                    {% endfor %}
+                </table>
+              </div>
+            <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="logs-tab">
+              <ul class="nav nav-pills mb-3" id="all-pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link active filter" id="all-filter-pills-tab" data-bs-toggle="pill" href="#all-pills" role="tab" aria-controls="all-pills" aria-selected="true">All</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link filter" id="bot-pills-tab" data-bs-toggle="pill" href="#bot-pills" role="tab" aria-controls="bot-pills" aria-selected="false">Bots</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link filter" id="other-pills-tab" data-bs-toggle="pill" href="#other-pills" role="tab" aria-controls="other-pills" aria-selected="false">Others</a>
+                </li>
+              </ul>
+            <ul class="nav nav-pills mb-3" id="filter-pills-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a class="nav-link active filter" id="all-filter-pills-tab" data-bs-toggle="pill" href="#filter-pills" role="tab" aria-controls="filter-pills" aria-selected="true">All bots</a>
+              </li>
+
+              {% for bot in bots %}
+              <li class="nav-item" role="presentation">
+                <a class="nav-link filter" id="{{ bot['login'] }}-filter-pills-tab" data-bs-toggle="pill" href="#filter-pills" role="tab" aria-controls="filter-pills" aria-selected="true">{{ bot['login'] }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+            <ul class="nav nav-pills mb-3" id="all-logs-filter-pills-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a class="nav-link active filter" id="logs-filter-pills-tab" data-bs-toggle="pill" href="#logs-filter-pills" role="tab" aria-controls="logs-filter-pills" aria-selected="true">All logs</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link filter" id="steam-logs-filter-pills-tab" data-bs-toggle="pill" href="#logs-filter-pills" role="tab" aria-controls="logs-filter-pills" aria-selected="true">Steam</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link filter" id="proxy-logs-filter-pills-tab" data-bs-toggle="pill" href="#logs-filter-pills" role="tab" aria-controls="logs-filter-pills" aria-selected="true">Proxy</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link filter" id="others-filter-pills-tab" data-bs-toggle="pill" href="#logs-filter-pills" role="tab" aria-controls="logs-filter-pills" aria-selected="true">Others</a>
+              </li>
+            </ul>
+            <table class="table table-hover" id="all-logs">
+              <thead>
+                <tr>
+                  <th scope="col">Bot</th>
+                  <th scope="col">Log Time</th>
+                  <th scope="col">Proxy</th>
+                  <th scope="col">Request</th>
+                  <th scope="col">Response</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for log in logs %}
+                <tr class="{{ log['type'] }}">
+                  <th scope="row">{{ log['login'] }}</th>
+                  <td>{{ log['date'] }}</td>
+                  <td>{{ log['proxy'] }}</td>
+                  <td>{{ log['request'] }}</td>
+                  <td>{{ log['response'] }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+
+    <script>
+      function getSelectedLink(toSearch) {
+        return $(toSearch + " a").toArray().filter(a => $(a).hasClass("active"))[0];
+      }
+
+      $(".filter").toArray().forEach(function (filterObject) {
+        filterObject.addEventListener("click", function (event) {
+          let logsTableRows = $("#all-logs tr").toArray();
+          const logsRows = logsTableRows.copyWithin();
+
+          const selectedAllType = getSelectedLink("#all-pills-tab");
+          const selectedFilterType = getSelectedLink("#filter-pills-tab");
+          const selectedLogsType = getSelectedLink("#all-logs-filter-pills-tab");
+
+          if ((selectedAllType.innerText === "Bots" &&
+              logsTableRows[0].cells[0].innerText !== "Bot") ||
+              selectedAllType.innerText === "Others")
+            logsTableRows = [];
+
+          if (selectedFilterType.innerText !== "All bots")
+            logsTableRows = logsTableRows.filter(row => row.cells[0].innerText === "Bot" || row.cells[0].innerText === selectedFilterType.innerText);
+
+          if (selectedLogsType.innerText !== "All logs")
+            logsTableRows = logsTableRows.filter(row => row.cells[0].innerText === "Bot" || $(row).hasClass(selectedLogsType.innerText.toLowerCase()));
+
+          for (logRow of logsRows)
+            $(logRow).toggle(logsTableRows.includes(logRow));
+        });
+      });
+    </script>
+</body>
+</html>

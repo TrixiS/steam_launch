@@ -1,0 +1,12 @@
+
+#navigation-tab {
+    text-align: justify;
+}
+
+#bots-tab-content > * {
+    margin-top: 1%;
+}
+
+#add-bot-button {
+    float: left;
+}
